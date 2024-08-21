@@ -85,7 +85,7 @@ export default function App() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Authorization': `${localStorage.getItem('token')}`,
       },
     })
     // On success, we should set the articles in their proper state and
@@ -106,7 +106,11 @@ export default function App() {
     })
     // If something goes wrong, check the status of the response:
     .catch((error) => {
-      setMessage('Failed to fetch articles. Try again.')
+      if (error.message === 'Unauthorized') {
+        redirectToLogin();
+      } else {
+        setMessage('Failed to fetch articles. Try again.')
+      }
     })
     // Don't forget to turn off the spinner!
     .finally(() => {
@@ -125,7 +129,7 @@ export default function App() {
       method:'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Authorization': `${localStorage.getItem('token')}`,
       },
       body: JSON.stringify(article)
     })
@@ -151,7 +155,7 @@ export default function App() {
       method:'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Authorization': `${localStorage.getItem('token')}`,
       },
       body: JSON.stringify(article),
     })
@@ -176,7 +180,7 @@ export default function App() {
       method:'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Authorization': `${localStorage.getItem('token')}`,
       },
       body: JSON.stringify({}),
     })
