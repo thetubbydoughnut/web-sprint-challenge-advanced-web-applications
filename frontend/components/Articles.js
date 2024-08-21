@@ -7,6 +7,8 @@ export default function Articles({ articles, getArticles, deleteArticle, setCurr
     return <Navigate to='/' />;
   }
 
+  
+
   useEffect(() => {
     // ✨ grab the articles here, on first render only
     getArticles()

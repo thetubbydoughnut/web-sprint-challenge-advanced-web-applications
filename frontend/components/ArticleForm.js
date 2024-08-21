@@ -8,6 +8,8 @@ export default function ArticleForm({
   updateArticle,
   setCurrentArticleId,
   currentArticle,
+  setMessage,
+  redirectToArticles
 }) {
   const [values, setValues] = useState(initialFormValues)
 
@@ -38,12 +40,14 @@ export default function ArticleForm({
     // We must submit a new post or update an existing one,
     // depending on the truthyness of the `currentArticle` prop.
     if (currentArticle) {
-      updateArticle({ article_id: currentArticle.article_id, ...values})
+      const updatedArticle = {...currentArticle, ...values}
+      updateArticle({ article_id: currentArticle.article_id, article: updatedArticle})
     } else {
       postArticle(values)
     }
     setValues(initialFormValues)
     setMessage('Article submitted successfully')
+    redirectToArticles();
   }
 
   const isDisabled = () => {

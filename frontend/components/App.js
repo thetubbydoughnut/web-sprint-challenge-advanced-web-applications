@@ -15,6 +15,7 @@ export default function App() {
   const [articles, setArticles] = useState([])
   const [currentArticleId, setCurrentArticleId] = useState()
   const [spinnerOn, setSpinnerOn] = useState(false)
+  const [currentArticle, setCurrentArticle] = useState(null)
 
   // ✨ Research `useNavigate` in React Router v.6
   const navigate = useNavigate()
@@ -157,6 +158,7 @@ export default function App() {
     })
     .then((res) => res.json())
     .then(data => {
+      const updatedArticles = articles.map((a) => a.id === article_id ? article : a);
       setArticles(articles.map((a) => a.id === article_id ? data.article : a));
       setMessage(data.message);
     })
@@ -193,6 +195,12 @@ export default function App() {
     });
   }
 
+  const handleSetCurrentArticle = (id) => {
+    setCurrentArticleId(id);
+    const article = articles.find((a) => a.id === id)
+    setCurrentArticle(article);
+  }
+
   return (
     // ✨ fix the JSX: `Spinner`, `Message`, `LoginForm`, `ArticleForm` and `Articles` expect props ❗
     <>
@@ -209,8 +217,10 @@ export default function App() {
           <Route path="/" element={<LoginForm login={login}/>} />
           <Route path="articles" element={
             <>
-              <ArticleForm postArticle={postArticle} updateArticle={updateArticle} setCurrentArticleId={setCurrentArticleId}/>
-              <Articles articles={articles} updateArticle={updateArticle} deleteArticle={deleteArticle} getArticles={getArticles} setCurrentArticleId={setCurrentArticleId} />
+              <ArticleForm postArticle={postArticle} updateArticle={updateArticle} setCurrentArticleId={handleSetCurrentArticle} setMessage={setMessage} redirectToArticles={redirectToArticles}
+              currentArticle={currentArticle}
+              />
+              <Articles articles={articles} updateArticle={updateArticle} deleteArticle={deleteArticle} getArticles={getArticles} setCurrentArticleId={handleSetCurrentArticle} />
             </>
           } />
         </Routes>
