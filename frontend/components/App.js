@@ -102,27 +102,90 @@ export default function App() {
     })
   }
 
-  const postArticle = article => {
+  const postArticle = (article) => {
     // ✨ implement
     // The flow is very similar to the `getArticles` function.
     // You'll know what to do! Use log statements or breakpoints
     // to inspect the response from the server.
+    setMessage('');
+    setSpinnerOn(true);
+    fetch(articlesUrl, {
+      method:'POST',
+      headers: {
+        'Content-Type': 'applicaiton/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify(article)
+    })
+    .then((res) => res.json())
+    .then(data => {
+      setArticles([...articles, data.article]);
+      setMessage(data.message);
+    })
+    .catch((error) => {
+      setMessage('Failed to post article. Try again');
+    })
+    .finally(() => {
+      setSpinnerOn(false);
+    });
   }
 
   const updateArticle = ({ article_id, article }) => {
     // ✨ implement
     // You got this!
+    setMessage('');
+    setSpinnerOn(true);
+    fetch(`${articlesUrl}/${article_id}`, {
+      method:'PUT',
+      headers: {
+        'Content-Type': 'applicaiton/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify(article),
+    })
+    .then((res) => res.json())
+    .then(data => {
+      setArticles(articles.map((a) => a.id === article_id ? data.article : a));
+      setMessage(data.message);
+    })
+    .catch((error) => {
+      setMessage('Failed to update article. Try again');
+    })
+    .finally(() => {
+      setSpinnerOn(false);
+    });
   }
 
   const deleteArticle = article_id => {
     // ✨ implement
+    setMessage('');
+    setSpinnerOn(true);
+    fetch(`${articlesUrl}/${article_id}`, {
+      method:'DELETE',
+      headers: {
+        'Content-Type': 'applicaiton/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify(article),
+    })
+    .then((res) => res.json())
+    .then(data => {
+      setArticles(articles.filter((a) => a.id !== article_id));
+      setMessage(data.message);
+    })
+    .catch((error) => {
+      setMessage('Failed to delete article. Try again');
+    })
+    .finally(() => {
+      setSpinnerOn(false);
+    });
   }
 
   return (
     // ✨ fix the JSX: `Spinner`, `Message`, `LoginForm`, `ArticleForm` and `Articles` expect props ❗
     <>
-      <Spinner />
-      <Message />
+      <Spinner spinnerOn={spinnerOn}/>
+      <Message message={message}/>
       <button id="logout" onClick={logout}>Logout from app</button>
       <div id="wrapper" style={{ opacity: spinnerOn ? "0.25" : "1" }}> {/* <-- do not change this line */}
         <h1>Advanced Web Applications</h1>
@@ -131,11 +194,11 @@ export default function App() {
           <NavLink id="articlesScreen" to="/articles">Articles</NavLink>
         </nav>
         <Routes>
-          <Route path="/" element={<LoginForm />} />
+          <Route path="/" element={<LoginForm login={login}/>} />
           <Route path="articles" element={
             <>
-              <ArticleForm />
-              <Articles />
+              <ArticleForm postArticle={postArticle}/>
+              <Articles articles={articles} updateArticle={updateArticle} deleteArticle={deleteArticle}/>
             </>
           } />
         </Routes>
