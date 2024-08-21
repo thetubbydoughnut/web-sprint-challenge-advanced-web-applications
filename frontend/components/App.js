@@ -34,7 +34,8 @@ export default function App() {
     redirectToLogin()
   }
 
-  const login = ({ username, password }) => {
+  const login = (credentials) => {
+    const { username, password } = credentials
     // ✨ implement
     // We should flush the message state, turn on the spinner
     setMessage('');
@@ -44,20 +45,27 @@ export default function App() {
     fetch(loginUrl, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ username, password }),
     })
-    .then((res) => res.json())
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(res.status + ' ' + res.statusText)
+      }
+      return res.json();
+    })
     // On success, we should set the token to local storage in a 'token' key,
     .then((data) => {
       console.log("data -> ", data);
-      localStorage.setItem('token', data.token);
-      console.log("local token check if stored -> ", localStorage.getItem('token'));
-      setMessage(data.message);
-      // put the server success message in its proper state, and redirect
-      // to the Articles screen. Don't forget to turn off the spinner!
-      redirectToArticles();
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+        console.log("local token check if stored -> ", localStorage.getItem('token'));
+        setMessage(data.message);
+        // put the server success message in its proper state, and redirect
+        // to the Articles screen. Don't forget to turn off the spinner!
+        redirectToArticles();
+      }
       setSpinnerOn(false);
     })
     .catch((error) => {
@@ -76,7 +84,7 @@ export default function App() {
     fetch(articlesUrl, {
       method: 'GET',
       headers: {
-        'Content-Type': 'applicaiton/json',
+        'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
       },
     })
@@ -116,7 +124,7 @@ export default function App() {
     fetch(articlesUrl, {
       method:'POST',
       headers: {
-        'Content-Type': 'applicaiton/json',
+        'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
       },
       body: JSON.stringify(article)
@@ -142,7 +150,7 @@ export default function App() {
     fetch(`${articlesUrl}/${article_id}`, {
       method:'PUT',
       headers: {
-        'Content-Type': 'applicaiton/json',
+        'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
       },
       body: JSON.stringify(article),
@@ -167,10 +175,10 @@ export default function App() {
     fetch(`${articlesUrl}/${article_id}`, {
       method:'DELETE',
       headers: {
-        'Content-Type': 'applicaiton/json',
+        'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
       },
-      body: JSON.stringify(article),
+      body: JSON.stringify({}),
     })
     .then((res) => res.json())
     .then(data => {

@@ -15,7 +15,8 @@ export default function LoginForm({ login }) {
 
   const onSubmit = evt => {
     evt.preventDefault()
-    login(values.username, values.password)
+    console.log('Submitting values => ', values)
+    login(values)
   }
 
   console.log(values)
