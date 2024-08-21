@@ -42,6 +42,8 @@ export default function ArticleForm({
     } else {
       postArticle(values)
     }
+    setValues(initialFormValues)
+    setMessage('Article submitted successfully')
   }
 
   const isDisabled = () => {

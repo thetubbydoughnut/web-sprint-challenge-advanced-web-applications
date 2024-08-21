@@ -41,7 +41,6 @@ export default function App() {
     setMessage('');
     setSpinnerOn(true);
     // and launch a request to the proper endpoint.
-    console.log({ username, password })
     fetch(loginUrl, {
       method: 'POST',
       headers: {
@@ -57,10 +56,8 @@ export default function App() {
     })
     // On success, we should set the token to local storage in a 'token' key,
     .then((data) => {
-      console.log("data -> ", data);
       if (data.token) {
         localStorage.setItem('token', data.token);
-        console.log("local token check if stored -> ", localStorage.getItem('token'));
         setMessage(data.message);
         // put the server success message in its proper state, and redirect
         // to the Articles screen. Don't forget to turn off the spinner!
@@ -75,7 +72,6 @@ export default function App() {
   }
 
   const getArticles = () => {
-    console.log('Local Token check if retrieved correct -> ', localStorage.getItem('token')); 
     // ✨ implement
     // We should flush the message state, turn on the spinner
     setMessage('');
