@@ -19,7 +19,7 @@ export default function App() {
   // ✨ Research `useNavigate` in React Router v.6
   const navigate = useNavigate()
   const redirectToLogin = () => {navigate('/')}
-  const redirectToArticles = () => { /* ✨ implement */ }
+  const redirectToArticles = () => { navigate('/articles')}
 
   const logout = () => {
     // ✨ implement
@@ -40,6 +40,7 @@ export default function App() {
     setMessage('');
     setSpinnerOn(true);
     // and launch a request to the proper endpoint.
+    console.log({ username, password })
     fetch(loginUrl, {
       method: 'POST',
       headers: {
@@ -50,11 +51,13 @@ export default function App() {
     .then((res) => res.json())
     // On success, we should set the token to local storage in a 'token' key,
     .then((data) => {
+      console.log("data -> ", data);
       localStorage.setItem('token', data.token);
+      console.log("local token check if stored -> ", localStorage.getItem('token'));
       setMessage(data.message);
       // put the server success message in its proper state, and redirect
       // to the Articles screen. Don't forget to turn off the spinner!
-      redirectToArticles;
+      redirectToArticles();
       setSpinnerOn(false);
     })
     .catch((error) => {
@@ -64,6 +67,7 @@ export default function App() {
   }
 
   const getArticles = () => {
+    console.log('Local Token check if retrieved correct -> ', localStorage.getItem('token')); 
     // ✨ implement
     // We should flush the message state, turn on the spinner
     setMessage('');
