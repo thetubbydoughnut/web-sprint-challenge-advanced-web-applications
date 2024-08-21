@@ -54,7 +54,7 @@ export default function App() {
       setMessage(data.message);
       // put the server success message in its proper state, and redirect
       // to the Articles screen. Don't forget to turn off the spinner!
-      navigate('/articles');
+      redirectToArticles;
       setSpinnerOn(false);
     })
     .catch((error) => {
@@ -184,7 +184,7 @@ export default function App() {
   return (
     // ✨ fix the JSX: `Spinner`, `Message`, `LoginForm`, `ArticleForm` and `Articles` expect props ❗
     <>
-      <Spinner spinnerOn={spinnerOn}/>
+      <Spinner spinnerOn={spinnerOn} on={getArticles}/>
       <Message message={message}/>
       <button id="logout" onClick={logout}>Logout from app</button>
       <div id="wrapper" style={{ opacity: spinnerOn ? "0.25" : "1" }}> {/* <-- do not change this line */}
@@ -197,8 +197,8 @@ export default function App() {
           <Route path="/" element={<LoginForm login={login}/>} />
           <Route path="articles" element={
             <>
-              <ArticleForm postArticle={postArticle}/>
-              <Articles articles={articles} updateArticle={updateArticle} deleteArticle={deleteArticle}/>
+              <ArticleForm postArticle={postArticle} updateArticle={updateArticle} setCurrentArticleId={setCurrentArticleId}/>
+              <Articles articles={articles} updateArticle={updateArticle} deleteArticle={deleteArticle} getArticles={getArticles} setCurrentArticleId={setCurrentArticleId} />
             </>
           } />
         </Routes>

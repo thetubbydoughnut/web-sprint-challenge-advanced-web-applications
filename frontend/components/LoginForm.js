@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import PT from 'prop-types'
 
 const initialFormValues = {
@@ -8,10 +8,6 @@ const initialFormValues = {
 export default function LoginForm({ login }) {
   const [values, setValues] = useState(initialFormValues)
   // ✨ where are my props? Destructure them here
-
-  useEffect(() => {
-
-  }, [])
 
   const onChange = evt => {
     const { id, value } = evt.target
