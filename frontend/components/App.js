@@ -158,7 +158,7 @@ export default function App() {
     })
     .then((res) => res.json())
     .then(data => {
-      const updatedArticles = articles.map((a) => a.id === article_id ? article : a);
+      const updatedArticles = articles.map((a) => a.article_id === article_id ? article : a);
       setArticles(updatedArticles);
       setMessage(data.message);
     })
@@ -197,7 +197,7 @@ export default function App() {
 
   const handleSetCurrentArticle = (id) => {
     setCurrentArticleId(id);
-    const article = articles.find((a) => a.id === id)
+    const article = articles.find((a) => a.article_id === id)
     setCurrentArticle(article);
   }
 
