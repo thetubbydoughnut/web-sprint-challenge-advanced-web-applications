@@ -159,7 +159,7 @@ export default function App() {
     .then((res) => res.json())
     .then(data => {
       const updatedArticles = articles.map((a) => a.id === article_id ? article : a);
-      setArticles(articles.map((a) => a.id === article_id ? data.article : a));
+      setArticles(updatedArticles);
       setMessage(data.message);
     })
     .catch((error) => {
@@ -184,7 +184,7 @@ export default function App() {
     })
     .then((res) => res.json())
     .then(data => {
-      setArticles(articles.filter((a) => a.id !== article_id));
+      setArticles(articles.filter((a) => a.article_id !== article_id));
       setMessage(data.message);
     })
     .catch((error) => {
