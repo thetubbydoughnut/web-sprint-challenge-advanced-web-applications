@@ -69,7 +69,7 @@ export default function App() {
     .catch((error) => {
       setSpinnerOn(false);
       setMessage('Login failed. Try again.')
-    })
+    }) 
   }
 
   const getArticles = () => {
